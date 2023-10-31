@@ -1,0 +1,16 @@
+hub_subscription_id          = ""
+location                     = "uksouth"
+private_dns_zone             = "privatelink.database.windows.net"
+private_endpoint_name        = "test-terraform"
+private_endpoint_subnet_name = "PrivateEndPoints"
+private_endpoint_vnet_name   = "dev-vnet"
+resource_group_name          = "emea-dev-rg"
+subresource_names            = ["blob"]
+subscription_id              = ""
+tags                         = {}
+tenant_id                    =""
+subnet_id                    = ""
+dns_rg                       = "dns-main-rg"
+dns_zone_ids                 = []
+private_endpoint_vnet_rg     = "network-rg"
+resource_id                  = ""

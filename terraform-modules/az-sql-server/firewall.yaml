@@ -1,0 +1,7 @@
+name:
+- rule_name: "Rule1"
+  start_ip_address: "18.82.1.0"
+  end_ip_address: "158.82.1.254"
+- rule_name: "Rule2"
+  start_ip_address: "18.82.1.0"
+  end_ip_address: "18.82.1.254"

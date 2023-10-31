@@ -1,0 +1,75 @@
+trigger:
+  branches:
+    include:
+    - main
+
+parameters:
+  - name: Action
+    displayName: Action
+    type: string
+    default: 'Plan'
+    values:
+    - Plan
+
+variables:
+  - name: backendServiceArm
+    value: 'Test'
+  - name: backendAzureRmResourceGroupName
+    value: 'Terraform-shared-dev-rg'
+  - name: backendAzureRmStorageAccountName
+    value: 'ssts7dfg'
+  - name: backendAzureRmContainerName
+    value: 'terraform-dev'
+  - name: backendAzureRmKey
+    value: 'terraform.tfstate'
+  - name: action
+    value: ${{ parameters.Action }}
+  - name: agentIP
+    value: ''
+  - name: azkeyvault
+    value: 'kv-dev-m416kQ'
+  - name: BRANCH_NAME
+    value: $(Build.SourceBranchName)
+
+
+
+stages:
+
+- stage: Build
+  jobs:
+  - job: Build
+    pool:
+      vmImage: 'ubuntu-latest'
+    steps:
+    - checkout: self
+    - task: AzureKeyVault@2
+      inputs:
+        azureSubscription: 'AJG GallagherRe EMEA Dev'
+        KeyVaultName: '${{ variables.azkeyvault }}'
+        SecretsFilter: '*'
+        RunAsPreJob: false
+    - task: AzureCLI@2
+      displayName: 'Set-Env-Vars'
+      inputs:
+        azureSubscription: 'AJG GallagherRe EMEA Dev'
+        scriptType: 'bash'
+        scriptLocation: 'inlineScript'
+        inlineScript: |
+           echo "Setting Terraform Vars"
+           ./terraform-modules/scripts/kvextract.sh $(azkeyvault) ./terraform-modules/env_configs/dev/env.tfvars
+
+    - task: Bash@3
+      displayName: 'Terraform-Plan-Validation'
+      env:
+        token: $(access-token)
+        var-tf-state-blob-key: $(storage-access-keys)
+        var-tf-state-object-id: $(object-id)
+        ARM_SUBSCRIPTION_ID: $(subscription-id)
+        ARM_CLIENT_ID: $(client-id)
+        ARM_CLIENT_SECRET: $(client-secret)
+        ARM_TENANT_ID: $(tenant-id)
+      inputs:
+        targetType: 'inline'
+        script: |
+          ./terraform-modules/scripts/pipeline.sh $token $(BRANCH_NAME)
+

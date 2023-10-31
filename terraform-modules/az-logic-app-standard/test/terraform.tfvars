@@ -1,0 +1,12 @@
+appsvcplanrg         = "coreservicesappserviceplan-main-emea-dev-rg"
+importappsvcplan     = "appsvcplan-dev-eriqlthuy3"
+location             = "uksouth"
+logic_app_name       = "logic-app"
+resource_group_name  = "datahub-test-emea-dev-rg"
+storage_account_name = "devkepzwfr15y"
+subnet_name          = "ASP-Subnet"
+vnet_name            = "dev-vnet"
+vnet_rg              = "network-rg"
+subscription_id      = "subscription-id"
+tags                 = {}
+tenant_id            = "tenant-id"
